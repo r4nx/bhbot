@@ -6,7 +6,8 @@ LOCALE_EN = {
 }
 
 LOCALE_RU = {
-    'CMD_NOT_FOUND': 'Команда не найдена.'
+    'CMD_NOT_FOUND': 'Команда не найдена.',
+    'EMPTY_CMD': 'Команда не указана.'
 }
 
 _LOCALES = {

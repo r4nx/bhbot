@@ -9,25 +9,54 @@ from logger import get_logger
 from settings import SETTINGS
 from models import CommandDispatcher
 from default_commands.alive import AliveCommand
+from default_commands.morning import MorningCommand
+from default_commands.goodnight import GoodNightCommand
+from default_commands.pseudowho import PseudoWhoCommand
+from default_commands.pseudolist import PseudoListCommand
+from default_commands.evgensim import EvgenSimulatorCommand
+from default_commands.ask import AskCommand
 
 
-def error_handler(exctype, value, tb, log):
+log = None
+
+
+def error_handler(exctype, value, tb):
     log.error('An error has occurred.', exc_info=(exctype, value, tb))
 
 
 def main():
+    global log
     log = get_logger(__name__, file_name='bhbot.log')
-    sys.excepthook = partial(error_handler, log=log)
 
-    aliveCmd = AliveCommand(triggers=['alive'])
-    
+    sys.excepthook = error_handler
+
+    alive_cmd = AliveCommand(triggers=['alive'])
+    morning_cmd = MorningCommand(triggers=['morning', 'utro', 'ytro', 'утро'])
+    goodnight_cmd = GoodNightCommand(triggers=['spok', 'спок'])
+    pseudowho_cmd = PseudoWhoCommand(triggers=['who', 'кто', 'кому'])
+    pseudolist_cmd = PseudoListCommand(triggers=['list', 'список'])
+    evgensim_cmd = EvgenSimulatorCommand(triggers=['evgensim', 'evgen1137', 'евген'])
+    ask_cmd = AskCommand(triggers=['ask', 'спрос'])
+
     cmd_dispatcher = CommandDispatcher()
-    cmd_dispatcher.register_command(aliveCmd)
+    cmd_dispatcher.register_command(alive_cmd)
+    cmd_dispatcher.register_command(morning_cmd)
+    cmd_dispatcher.register_command(goodnight_cmd)
+    cmd_dispatcher.register_command(pseudowho_cmd)
+    cmd_dispatcher.register_command(pseudolist_cmd)
+    cmd_dispatcher.register_command(evgensim_cmd)
+    cmd_dispatcher.register_command(ask_cmd)
 
     tb = telebot.TeleBot(SETTINGS['BOT_TOKEN'])
 
     @tb.message_handler(func=lambda msg: msg.text is not None and msg.text.startswith(SETTINGS['CMD_PREFIX']))
     def message_handler(message):
+        if message.text.startswith('!!'):
+            commands = {}
+            for trigger, cmd in sorted(cmd_dispatcher.commands.items()):
+                commands.setdefault(cmd, []).append(trigger)
+            tb.send_message(message.chat.id, 'Commands list:\n' + '\n'.join([' '.join(triggers) for triggers in commands.values()]))
+            return
         context = {
             'bot': tb,
             'message': message
@@ -37,7 +66,6 @@ def main():
             tb.send_message(message.chat.id, response)
     
     log.info('Bot started')
-    print(tb.get_me())
 
     while True:
         try:
@@ -51,7 +79,6 @@ def main():
             except (KeyboardInterrupt, EOFError, SystemExit):
                 log.info('Exited manually during restart')
                 break
-
 
 if __name__ == '__main__':
     main()
