@@ -14,6 +14,7 @@ members = (
     'imring',
     'molimawka',
     'randazzo',
+    'memir'
 )
 
 
