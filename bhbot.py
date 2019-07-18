@@ -49,7 +49,7 @@ def main():
 
     tb = telebot.TeleBot(SETTINGS['BOT_TOKEN'])
 
-    @tb.message_handler(func=lambda msg: msg.text is not None and msg.text.startswith(SETTINGS['CMD_PREFIX']))
+    @tb.message_handler(func=lambda msg: msg.text is not None and msg.text.startswith(SETTINGS['CMD_PREFIX']) and msg.forward_date is None)
     def message_handler(message):
         if message.text.startswith('!!'):
             commands = {}
