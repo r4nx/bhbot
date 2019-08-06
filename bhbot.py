@@ -16,6 +16,7 @@ from default_commands.pseudolist import PseudoListCommand
 from default_commands.evgensim import EvgenSimulatorCommand
 from default_commands.ask import AskCommand
 from default_commands.rules import RulesCommand
+from default_commands.or_cmd import OrCommand
 
 
 log = None
@@ -34,11 +35,12 @@ def main():
     alive_cmd = AliveCommand(triggers=['alive'])
     morning_cmd = MorningCommand(triggers=['morning', 'utro', 'ytro', 'утро'])
     goodnight_cmd = GoodNightCommand(triggers=['spok', 'спок'])
-    pseudowho_cmd = PseudoWhoCommand(triggers=['who', 'кто', 'кому'])
+    pseudowho_cmd = PseudoWhoCommand(triggers=['who', 'кто', 'кому', 'кого'])
     pseudolist_cmd = PseudoListCommand(triggers=['list', 'список'])
     evgensim_cmd = EvgenSimulatorCommand(triggers=['evgensim', 'evgen1137', 'евген'])
     ask_cmd = AskCommand(triggers=['ask', 'спрос'])
     rules_cmd = RulesCommand(triggers=['rules', 'правила'])
+    or_cmd = OrCommand(triggers=['or', 'или'])
 
     cmd_dispatcher = CommandDispatcher()
     cmd_dispatcher.register_command(alive_cmd)
@@ -49,6 +51,7 @@ def main():
     cmd_dispatcher.register_command(evgensim_cmd)
     cmd_dispatcher.register_command(ask_cmd)
     cmd_dispatcher.register_command(rules_cmd)
+    cmd_dispatcher.register_command(or_cmd)
 
     tb = telebot.TeleBot(SETTINGS['BOT_TOKEN'])
 

@@ -5,17 +5,7 @@ from time import time
 import random
 
 from models import Command
-
-members = (
-    'kewa',
-    'ranx',
-    'книга',
-    'FYP',
-    'imring',
-    'molimawka',
-    'randazzo',
-    'memir'
-)
+from members import members
 
 
 class PseudoListCommand(Command):
@@ -23,4 +13,13 @@ class PseudoListCommand(Command):
         if len(context['args']) < 1:
             return 'Недостаточно аргументов.'
         random.seed(time())
-        return 'Список {}:\n{}'.format(' '.join(context['args']), '\n'.join(random.choices(members, k=random.randint(1,  5 if len(members) > 5 else len(members)))))
+        attempts = 0
+        selected = []
+        while len(selected) < random.randint(1, min(5, len(members))) and attempts < 5:
+            member = random.choice(members)
+            if member not in selected:
+                selected.append(member)
+            else:
+                attempts += 1
+            
+        return 'Список {}:\n{}'.format(' '.join(context['args']), '\n'.join(selected))

@@ -6,8 +6,6 @@ import random
 
 from models import Command
 
-from Levenshtein import distance
-
 
 class AskCommand(Command):
     def __call__(self, context: dict) -> str:
@@ -15,9 +13,6 @@ class AskCommand(Command):
             return 'Недостаточно аргументов.'
         
         question = ' '.join(context['args'])
-
-        if distance('что делать', question.lower()) < 6:
-            return 'муравью хуй приделать'
 
         random.seed(time())
 
