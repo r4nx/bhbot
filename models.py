@@ -19,7 +19,6 @@ class CommandDispatcher():
 
     def register_command(self, cmd: Command) -> None:
         self.commands.update({trigger: cmd for trigger in cmd.triggers})
-        print('commands triggers: {}'.format(' '.join(self.commands.keys())))
 
     def dispatch(self, text: str, context: dict) -> Optional[str]:
         args = text.split(' ')
