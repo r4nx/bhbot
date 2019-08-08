@@ -15,12 +15,14 @@ class OrCommand(Command):
             return 'Недостаточно аргументов.'
 
         text = ' '.join(context['args'])
-        variants = text.split('или')
+        variants = [variant.strip() for variant in text.split('или')]
+        variants = list(filter(lambda variant: len(variant) > 0, variants))
+
         if len(variants) < 2:
             return 'Недостаточно вариантов.'
 
         random.seed(time())
-        return random.choice(variants).strip()
+        return random.choice(variants)
 
 
 def get_command():
