@@ -7,6 +7,9 @@ from models import Command
 
 
 class OrCommand(Command):
+    @property
+    def triggers(self):
+        return ['or', 'или']
     def __call__(self, context: dict) -> str:
         if len(context['args']) < 1:
             return 'Недостаточно аргументов.'
@@ -18,3 +21,7 @@ class OrCommand(Command):
 
         random.seed(time())
         return random.choice(variants).strip()
+
+
+def get_command():
+    return OrCommand

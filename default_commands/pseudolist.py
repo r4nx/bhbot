@@ -9,6 +9,9 @@ from members import members
 
 
 class PseudoListCommand(Command):
+    @property
+    def triggers(self):
+        return ['list', 'список']
     def __call__(self, context: dict) -> str:
         if len(context['args']) < 1:
             return 'Недостаточно аргументов.'
@@ -23,3 +26,7 @@ class PseudoListCommand(Command):
                 attempts += 1
             
         return 'Список {}:\n{}'.format(' '.join(context['args']), '\n'.join(selected))
+
+
+def get_command():
+    return PseudoListCommand

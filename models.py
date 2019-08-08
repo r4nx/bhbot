@@ -5,12 +5,17 @@ from lang import get_phrase
 
 
 class Command(ABC):
-    def __init__(self, triggers: Iterable[str]):
-        self.triggers = triggers
+    @property
+    @abstractmethod
+    def triggers(self):
+        pass
 
     @abstractmethod
     def __call__(self, context: dict) -> str:
         pass
+
+    def setup(self, dispatcher):
+        dispatcher.register_command(self.__class__())
 
 
 class CommandDispatcher():
