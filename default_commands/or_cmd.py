@@ -3,7 +3,7 @@ import random
 import sys
 sys.path.append('..')
 
-from models import Command
+from bhbot.models import Command
 
 
 class OrCommand(Command):

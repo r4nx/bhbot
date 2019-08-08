@@ -4,8 +4,8 @@ sys.path.append('..')
 from time import time
 import random
 
-from models import Command
-from members import members
+from bhbot.models import Command
+from bhbot.members import members
 
 
 class PseudoListCommand(Command):

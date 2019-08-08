@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 from typing import Iterable, Optional
 
-from lang import get_phrase
+from bhbot.lang import get_phrase
 
 
 class Command(ABC):

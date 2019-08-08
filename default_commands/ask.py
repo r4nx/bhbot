@@ -4,7 +4,7 @@ sys.path.append('..')
 from time import time
 import random
 
-from models import Command
+from bhbot.models import Command
 
 
 class AskCommand(Command):
