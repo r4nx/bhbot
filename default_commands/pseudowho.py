@@ -40,6 +40,9 @@ members_genetive = (
 
 
 class PseudoWhoCommand(Command):
+    @property
+    def triggers(self):
+        return ['who', 'кто', 'кому', 'кого']
     def __call__(self, context: dict) -> str:
         if len(context['args']) < 1:
             return 'Недостаточно аргументов.'
@@ -51,3 +54,7 @@ class PseudoWhoCommand(Command):
 
         random.seed(time())
         return random.choice(members) + ' ' + ' '.join(context['args'])
+
+
+def get_command():
+    return PseudoWhoCommand

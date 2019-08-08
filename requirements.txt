@@ -1,1 +1,2 @@
 pyTelegramBotAPI==3.6.6
+pluginbase==1.0.0

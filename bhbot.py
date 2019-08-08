@@ -1,23 +1,18 @@
-from functools import partial
-from time import sleep
+import os
 import sys
+from time import sleep
+from functools import partial
 
 import telebot
 from requests.exceptions import RequestException
+from pluginbase import PluginBase
 
-from logger import get_logger
 from settings import SETTINGS
+from logger import get_logger
 from models import CommandDispatcher
-from default_commands.alive import AliveCommand
-from default_commands.morning import MorningCommand
-from default_commands.goodnight import GoodNightCommand
-from default_commands.pseudowho import PseudoWhoCommand
-from default_commands.pseudolist import PseudoListCommand
-from default_commands.evgensim import EvgenSimulatorCommand
-from default_commands.ask import AskCommand
-from default_commands.rules import RulesCommand
-from default_commands.or_cmd import OrCommand
 
+here = os.path.abspath(os.path.dirname(__file__))
+get_path = partial(os.path.join, here)
 
 log = None
 
@@ -32,26 +27,20 @@ def main():
 
     sys.excepthook = error_handler
 
-    alive_cmd = AliveCommand(triggers=['alive'])
-    morning_cmd = MorningCommand(triggers=['morning', 'utro', 'ytro', 'утро'])
-    goodnight_cmd = GoodNightCommand(triggers=['spok', 'спок'])
-    pseudowho_cmd = PseudoWhoCommand(triggers=['who', 'кто', 'кому', 'кого'])
-    pseudolist_cmd = PseudoListCommand(triggers=['list', 'список'])
-    evgensim_cmd = EvgenSimulatorCommand(triggers=['evgensim', 'evgen1137', 'евген'])
-    ask_cmd = AskCommand(triggers=['ask', 'спрос'])
-    rules_cmd = RulesCommand(triggers=['rules', 'правила'])
-    or_cmd = OrCommand(triggers=['or', 'или'])
-
     cmd_dispatcher = CommandDispatcher()
-    cmd_dispatcher.register_command(alive_cmd)
-    cmd_dispatcher.register_command(morning_cmd)
-    cmd_dispatcher.register_command(goodnight_cmd)
-    cmd_dispatcher.register_command(pseudowho_cmd)
-    cmd_dispatcher.register_command(pseudolist_cmd)
-    cmd_dispatcher.register_command(evgensim_cmd)
-    cmd_dispatcher.register_command(ask_cmd)
-    cmd_dispatcher.register_command(rules_cmd)
-    cmd_dispatcher.register_command(or_cmd)
+
+    plugin_base = PluginBase(package='bhbot.plugins')
+    command_source = plugin_base.make_plugin_source(
+        searchpath=[get_path('./default_commands')]
+    )
+
+    for plugin_name in command_source.list_plugins():
+        log.info('Loading {}..'.format(plugin_name))
+
+        plugin = command_source.load_plugin(plugin_name)
+        CommandClass = plugin.get_command()
+        cmd = CommandClass()
+        cmd.setup(cmd_dispatcher)
 
     tb = telebot.TeleBot(SETTINGS['BOT_TOKEN'])
 
@@ -70,7 +59,7 @@ def main():
         response = cmd_dispatcher.dispatch(message.text[len(SETTINGS['CMD_PREFIX']):], context)
         if response is not None:
             tb.send_message(message.chat.id, response)
-    
+
     log.info('Bot started')
 
     while True:

@@ -8,6 +8,9 @@ from models import Command
 
 
 class AskCommand(Command):
+    @property
+    def triggers(self):
+        return ['ask', 'спрос']
     def __call__(self, context: dict) -> str:
         if len(context['args']) < 1:
             return 'Недостаточно аргументов.'
@@ -27,3 +30,7 @@ class AskCommand(Command):
             ))
 
         return random.choice(('Да', 'Нет'))
+
+
+def get_command():
+    return AskCommand
