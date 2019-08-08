@@ -23,11 +23,11 @@ def error_handler(exctype, value, tb):
 
 def main():
     global log
-    log = get_logger(__name__, file_name='bhbot.log')
+    log = get_logger('bhbot', file_name='bhbot.log')
 
     sys.excepthook = error_handler
-
     cmd_dispatcher = CommandDispatcher()
+    tb = telebot.TeleBot(SETTINGS['BOT_TOKEN'])
 
     # Load commands
     plugin_base = PluginBase(package='bhbot.plugins')
@@ -43,8 +43,7 @@ def main():
         cmd = CommandClass()
         cmd.setup(cmd_dispatcher)
 
-    tb = telebot.TeleBot(SETTINGS['BOT_TOKEN'])
-
+    # Handle commands
     @tb.message_handler(func=lambda msg: msg.text is not None and \
         msg.text.startswith(SETTINGS['CMD_PREFIX']) and \
         msg.forward_date is None)
@@ -64,6 +63,18 @@ def main():
         response = cmd_dispatcher.dispatch(message.text[len(SETTINGS['CMD_PREFIX']):], context)
         if response is not None:
             tb.send_message(message.chat.id, response)
+
+    # Load plugins (this should be after command handler registration
+    # because handlers that is registrered first has higher priority)
+    plugin_source = plugin_base.make_plugin_source(
+        searchpath=[get_path('plugins')]
+    )
+
+    for plugin_name in plugin_source.list_plugins():
+        log.info('Loading plugin {}..'.format(plugin_name))
+
+        plugin = plugin_source.load_plugin(plugin_name)
+        plugin.setup(tb)
 
     log.info('Bot started')
 
