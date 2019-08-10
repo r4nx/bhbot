@@ -4,6 +4,7 @@ import sys
 sys.path.append('..')
 
 from bhbot.models import Command
+from bhbot.lang import get_phrase
 
 members_nominative = (
     'кеша',
@@ -45,7 +46,7 @@ class PseudoWhoCommand(Command):
         return ['who', 'кто', 'кому', 'кого']
     def __call__(self, context: dict) -> str:
         if len(context['args']) < 1:
-            return 'Недостаточно аргументов.'
+            return get_phrase('NOT_ENOUGH_ARGUMENTS')
 
         members = {
             'кому': members_dative,

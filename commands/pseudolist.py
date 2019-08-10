@@ -6,6 +6,7 @@ import random
 
 from bhbot.models import Command
 from bhbot.members import members
+from bhbot.lang import get_phrase
 
 
 class PseudoListCommand(Command):
@@ -14,7 +15,7 @@ class PseudoListCommand(Command):
         return ['list', 'список']
     def __call__(self, context: dict) -> str:
         if len(context['args']) < 1:
-            return 'Недостаточно аргументов.'
+            return get_phrase('NOT_ENOUGH_ARGUMENTS')
         random.seed(time())
         attempts = 0
         selected = []

@@ -4,6 +4,7 @@ import sys
 sys.path.append('..')
 
 from bhbot.models import Command
+from bhbot.lang import get_phrase
 
 
 class HowMuchCommand(Command):
@@ -12,7 +13,7 @@ class HowMuchCommand(Command):
         return ['howmuch', 'сколько']
     def __call__(self, context: dict) -> str:
         if len(context['args']) < 1:
-            return 'Недостаточно аргументов.'
+            return get_phrase('NOT_ENOUGH_ARGUMENTS')
 
         random.seed(time())
         return str(random.randint(0, 10000)) + ' ' + ' '.join(context['args'])
