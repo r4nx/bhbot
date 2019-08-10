@@ -20,9 +20,11 @@ CONTENT_EXPERIENCE = {
 }
 MIN_MESSAGES_INTERVAL = 4
 SAVING_INTERVAL = 60 * 5  # 5 minutes
+MAX_CACHE_AGE = 60 * 30  # 30 minutes
 DATA_FILE = get_path('experience.json')
 
 experience = defaultdict(dict)
+name_cache = {}
 last_messages = defaultdict(dict)
 last_save = time()
 bot = None
@@ -66,11 +68,21 @@ def command_handler(msg):
         next_level_exp = 25 * level * (1 + level)
         try:
             exp_list.append('{:16.16} - {:d} [{:.0f} / {:.0f}]'.format(
-                bot.get_chat(user_id).first_name, level, exp, next_level_exp)
+                get_name(user_id), level, exp, next_level_exp)
             )
         except telebot.apihelper.ApiException:
             logging.warning('User not found: {}'.format(user_id))
     bot.send_message(msg.chat.id, 'Level:\n    ' + '\n    '.join(exp_list))
+
+
+def get_name(user_id):
+    if user_id not in name_cache or time() - name_cache[user_id][1] > MAX_CACHE_AGE:
+        name_cache[user_id] = bot.get_chat(user_id).first_name, time()
+        logger.info('{} was not found in cache, maked request to Telegram API'.format(name_cache[user_id]))
+    else:
+        logger.info('{} was already in cache'.format(name_cache[user_id]))
+    return name_cache[user_id][0]
+
 
 def setup(tb):
     try:
