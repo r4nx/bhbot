@@ -19,7 +19,7 @@ CONTENT_EXPERIENCE = {
     'voice': 2.0
 }
 MIN_MESSAGES_INTERVAL = 4
-SAVING_INTERVAL = 10  # 5 minutes
+SAVING_INTERVAL = 60 * 5  # 5 minutes
 DATA_FILE = get_path('experience.json')
 
 experience = defaultdict(dict)
