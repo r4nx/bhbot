@@ -32,7 +32,7 @@ def main():
     # Load commands
     plugin_base = PluginBase(package='bhbot.plugins')
     command_source = plugin_base.make_plugin_source(
-        searchpath=[get_path('default_commands')]
+        searchpath=[get_path('commands')]
     )
 
     for command_name in command_source.list_plugins():
