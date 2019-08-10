@@ -5,6 +5,7 @@ from time import time
 import random
 
 from bhbot.models import Command
+from bhbot.lang import get_phrase
 
 
 class EvgenSimulatorCommand(Command):
@@ -13,7 +14,7 @@ class EvgenSimulatorCommand(Command):
         return ['evgensim', 'evgen1137', 'евген']
     def __call__(self, context: dict) -> str:
         if len(context['args']) < 1:
-            return 'Недостаточно аргументов.'
+            return get_phrase('NOT_ENOUGH_ARGUMENTS')
         evgen_templates = [
             'эмм\n{}',
             '{} как бы'

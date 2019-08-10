@@ -4,6 +4,7 @@ import sys
 sys.path.append('..')
 
 from bhbot.models import Command
+from bhbot.lang import get_phrase
 
 
 class OrCommand(Command):
@@ -12,7 +13,7 @@ class OrCommand(Command):
         return ['or', 'или']
     def __call__(self, context: dict) -> str:
         if len(context['args']) < 1:
-            return 'Недостаточно аргументов.'
+            return get_phrase('NOT_ENOUGH_ARGUMENTS')
 
         text = ' '.join(context['args'])
         variants = [variant.strip() for variant in text.split('или')]

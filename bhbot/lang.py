@@ -2,12 +2,14 @@ from settings import SETTINGS
 
 LOCALE_EN = {
     'CMD_NOT_FOUND': 'Command not found.',
-    'EMPTY_CMD': 'No command name specified.'
+    'EMPTY_CMD': 'No command name specified.',
+    'NOT_ENOUGH_ARGUMENTS': 'Not enough arguments.'
 }
 
 LOCALE_RU = {
     'CMD_NOT_FOUND': 'Команда не найдена.',
-    'EMPTY_CMD': 'Команда не указана.'
+    'EMPTY_CMD': 'Команда не указана.',
+    'NOT_ENOUGH_ARGUMENTS': 'Недостаточно аргументов.'
 }
 
 _LOCALES = {

@@ -4,6 +4,7 @@ import sys
 sys.path.append('..')
 
 from bhbot.models import Command
+from bhbot.lang import get_phrase
 
 
 class PercentCommand(Command):
@@ -12,7 +13,7 @@ class PercentCommand(Command):
         return ['percent', 'процент', 'проц']
     def __call__(self, context: dict) -> str:
         if len(context['args']) < 1:
-            return 'Недостаточно аргументов.'
+            return get_phrase('NOT_ENOUGH_ARGUMENTS')
 
         random.seed(time())
         return '{:d}% {}'.format(random.randint(0, 100), ' '.join(context['args']))

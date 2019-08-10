@@ -5,6 +5,7 @@ from time import time
 from datetime import datetime, timedelta
 
 from bhbot.models import Command
+from bhbot.lang import get_phrase
 
 
 class WhenCommand(Command):
@@ -14,7 +15,7 @@ class WhenCommand(Command):
 
     def __call__(self, context: dict) -> str:
         if len(context['args']) < 1:
-            return 'Недостаточно аргументов.'
+            return get_phrase('NOT_ENOUGH_ARGUMENTS')
 
         random.seed(time())
         now = datetime.now()

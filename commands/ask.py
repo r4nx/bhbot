@@ -5,6 +5,7 @@ from time import time
 import random
 
 from bhbot.models import Command
+from bhbot.lang import get_phrase
 
 
 class AskCommand(Command):
@@ -13,7 +14,7 @@ class AskCommand(Command):
         return ['ask', 'спрос']
     def __call__(self, context: dict) -> str:
         if len(context['args']) < 1:
-            return 'Недостаточно аргументов.'
+            return get_phrase('NOT_ENOUGH_ARGUMENTS')
         
         question = ' '.join(context['args'])
 
