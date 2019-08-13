@@ -44,6 +44,7 @@ class PseudoWhoCommand(Command):
     @property
     def triggers(self):
         return ['who', 'кто', 'кому', 'кого']
+
     def __call__(self, context: dict) -> str:
         if len(context['args']) < 1:
             return get_phrase('NOT_ENOUGH_ARGUMENTS')

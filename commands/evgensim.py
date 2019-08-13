@@ -12,6 +12,7 @@ class EvgenSimulatorCommand(Command):
     @property
     def triggers(self):
         return ['evgensim', 'evgen1137', 'евген']
+
     def __call__(self, context: dict) -> str:
         if len(context['args']) < 1:
             return get_phrase('NOT_ENOUGH_ARGUMENTS')
